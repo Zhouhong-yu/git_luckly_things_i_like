@@ -6,7 +6,8 @@
       "Bash(git remote *)",
       "Bash(git add *)",
       "Bash(git commit -m 'Initial commit: add README.md *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git revert *)"
     ]
   }
 }

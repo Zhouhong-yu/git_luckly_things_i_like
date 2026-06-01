@@ -1,0 +1,10 @@
+# =============================================================================
+# Python + OpenCV 学习项目 - 依赖清单
+# =============================================================================
+# 安装方式: pip install -r requirements.txt
+# 建议使用虚拟环境: python -m venv venv && venv\Scripts\activate
+
+opencv-python>=4.8.0        # OpenCV 主库：图像处理、计算机视觉
+opencv-contrib-python>=4.8.0 # OpenCV 贡献模块：包含 SIFT、SURF 等高级算法
+numpy>=1.24.0                # 数值计算基础库，OpenCV 内部使用 numpy 数组存储图像
+matplotlib>=3.7.0            # 用于在 Jupyter 或脚本中绘制图表和显示图像
