@@ -150,7 +150,7 @@ def demo_manual_stitch():
     # 使用 SIFT (如果有的话，否则用 ORB)
     try:
         detector = cv2.SIFT_create(nfeatures=200)
-    except AttributeError:
+    except (AttributeError, cv2.error):
         detector = cv2.ORB_create(nfeatures=200)
 
     kp_left, des_left = detector.detectAndCompute(gray_left, None)
@@ -329,20 +329,24 @@ def demo_stitcher_api():
 
     # --- 创建 Stitcher ---
     # cv2.Stitcher_create(mode)
-    #   mode: cv2.Stitcher_PANORAMA (全景) 或 cv2.Stitcher_SCANS (扫描文档)
+    #   mode: cv2.Stitcher_PANORAMA (=0, 全景) 或 cv2.Stitcher_SCANS (=1, 扫描文档)
     try:
         # OpenCV 4.x
         stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
-    except AttributeError:
-        # OpenCV 3.x 的兼容写法
-        stitcher = cv2.createStitcher(False)
+    except (AttributeError, NameError):
+        try:
+            # OpenCV 4.x (某些版本的常量名可能不同)
+            stitcher = cv2.Stitcher_create(0)  # 0 = PANORAMA
+        except AttributeError:
+            # OpenCV 3.x 的兼容写法
+            stitcher = cv2.createStitcher(False)
+            if stitcher is None:
+                print("   ❌ 无法创建 Stitcher，跳过")
+                return
 
     # --- 拼接 ---
     # stitcher.stitch(images) 返回 (status, result)
-    #   status: cv2.Stitcher_OK (=0) 表示成功
-    #   cv2.Stitcher_ERR_NEED_MORE_IMGS (=1)
-    #   cv2.Stitcher_ERR_HOMOGRAPHY_EST_FAIL (=2)
-    #   cv2.Stitcher_ERR_CAMERA_PARAMS_ADJUST_FAIL (=3)
+    #   status: 0=OK, 1=需要更多图片, 2=单应性估计失败, 3=相机参数调整失败
     status, stitched = stitcher.stitch([img_left, img_right])
 
     # --- 显示结果 ---
@@ -352,7 +356,7 @@ def demo_stitcher_api():
     ])
     cv2.destroyAllWindows()
 
-    if status == cv2.Stitcher_OK:
+    if status == 0:  # cv2.Stitcher_OK — 拼接成功
         # 裁剪黑边
         gray = cv2.cvtColor(stitched, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
@@ -366,9 +370,9 @@ def demo_stitcher_api():
         print("   ✅ 拼接成功！")
     else:
         status_msgs = {
-            cv2.Stitcher_ERR_NEED_MORE_IMGS: "需要更多图片",
-            cv2.Stitcher_ERR_HOMOGRAPHY_EST_FAIL: "单应性矩阵估计失败",
-            cv2.Stitcher_ERR_CAMERA_PARAMS_ADJUST_FAIL: "相机参数调整失败",
+            1: "需要更多图片",
+            2: "单应性矩阵估计失败",
+            3: "相机参数调整失败",
         }
         msg = status_msgs.get(status, f"未知错误 (status={status})")
         print(f"   ❌ 拼接失败: {msg}")

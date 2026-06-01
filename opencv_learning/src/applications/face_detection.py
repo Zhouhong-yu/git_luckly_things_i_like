@@ -54,7 +54,23 @@ def load_cascade():
     """
     # cv2.data.haarcascades 指向 OpenCV 的 Haar Cascade XML 文件目录
     # 这些是 OpenCV 安装时自带的预训练模型
-    cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    try:
+        cascade_dir = cv2.data.haarcascades
+    except AttributeError:
+        # 某些 OpenCV 构建版本可能没有 haarcascades 属性
+        # 尝试常见的安装路径
+        possible_dirs = [
+            os.path.join(os.path.dirname(cv2.__file__), "data"),
+            "/usr/share/opencv4/haarcascades",
+            "/usr/local/share/opencv4/haarcascades",
+        ]
+        cascade_dir = ""
+        for d in possible_dirs:
+            if os.path.isdir(d):
+                cascade_dir = d + "/"
+                break
+
+    cascade_path = cascade_dir + "haarcascade_frontalface_default.xml"
 
     # 也可以尝试其他模型：
     # haarcascade_frontalface_alt.xml       — 更准确但更慢

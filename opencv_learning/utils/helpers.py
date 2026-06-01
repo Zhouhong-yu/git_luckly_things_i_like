@@ -5,6 +5,15 @@
 # 这样做的好处是：避免在多个文件中重复写相同的代码（DRY 原则：Don't Repeat Yourself）
 # =============================================================================
 
+# Python 3.7-3.8 兼容：让所有类型注解不被求值，避免 list[tuple] 语法报错
+from __future__ import annotations
+
+# Windows 控制台编码修复：让 emoji 和中文能正常输出
+import sys as _sys
+if _sys.platform == 'win32' and hasattr(_sys.stdout, 'reconfigure'):
+    _sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    _sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 import cv2                # OpenCV 库：import cv2 是约定俗成的写法
 import numpy as np        # NumPy 库：import numpy as np 也是约定俗成的写法
 import os                 # 操作系统接口：处理文件路径
@@ -275,6 +284,15 @@ def load_image(filename: str = "sample.jpg") -> np.ndarray:
             print(f"✅ 成功加载图片: {path}")
             return img
 
-    # 文件不存在或读取失败，生成测试图片
+    # 文件不存在或读取失败，生成测试图片并自动保存
     print(f"⚠️  未找到图片 {path}，自动生成测试图片")
-    return create_sample_image()
+    img = create_sample_image()
+    # 自动保存到 data/ 目录，下次运行就不需要生成了
+    try:
+        data_dir = os.path.dirname(path)
+        os.makedirs(data_dir, exist_ok=True)
+        cv2.imwrite(path, img)
+        print(f"   💾 已自动保存到: {path}")
+    except Exception:
+        pass  # 保存失败也不影响程序运行
+    return img

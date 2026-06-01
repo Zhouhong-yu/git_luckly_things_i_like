@@ -10,6 +10,11 @@
 import sys          # 系统相关功能：获取 Python 版本、退出程序等
 import os           # 操作系统接口：处理文件路径
 
+# Windows 控制台编码修复（必须在任何 print 之前执行）
+if sys.platform == 'win32' and hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 # ---------- 将 src 目录添加到 Python 的模块搜索路径 ----------
 # sys.path 是一个列表，存放着 Python 搜索模块时所有会去查找的目录
 # os.path.dirname(__file__) 获取当前文件(main.py)所在的目录

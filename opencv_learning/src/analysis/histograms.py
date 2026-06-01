@@ -67,8 +67,11 @@ def demo_calc_histogram():
     print(f"   NumPy 直方图前5项: {hist_np[:5]}")
 
     # --- 可视化直方图 ---
-    import matplotlib
-    matplotlib.use("TkAgg")
+    try:
+        import matplotlib
+        matplotlib.use("TkAgg")  # 优先使用 Tkinter 后端
+    except Exception:
+        pass  # 如果 TkAgg 不可用，使用默认后端
     import matplotlib.pyplot as plt
 
     # 1. 灰度直方图
@@ -133,8 +136,11 @@ def demo_histogram_equalization():
     clahe_equalized = clahe.apply(low_contrast)
 
     # --- 可视化对比 ---
-    import matplotlib
-    matplotlib.use("TkAgg")
+    try:
+        import matplotlib
+        matplotlib.use("TkAgg")  # 优先使用 Tkinter 后端
+    except Exception:
+        pass  # 如果 TkAgg 不可用，使用默认后端
     import matplotlib.pyplot as plt
 
     fig, axes = plt.subplots(2, 3, figsize=(14, 8))

@@ -7,7 +7,18 @@
       "Bash(git add *)",
       "Bash(git commit -m 'Initial commit: add README.md *)",
       "Bash(git push *)",
-      "Bash(git revert *)"
+      "Bash(git revert *)",
+      "Bash(python -c \"import cv2; import numpy; print\\('OpenCV:', cv2.__version__, '| NumPy:', numpy.__version__\\)\")",
+      "Bash(where python3 *)",
+      "Bash(where python *)",
+      "Read(//c/Users/ITC/AppData/Local/Programs/**)",
+      "Read(//c/Program Files/**)",
+      "Bash(where py *)",
+      "Bash(cmd.exe /c \"where python\")",
+      "Bash(py check_env.py)",
+      "Bash(cmd.exe *)",
+      "Bash(/c/Python314/python.exe *)",
+      "Bash(PYTHONIOENCODING=utf-8 /c/Python314/python.exe *)"
     ]
   }
 }

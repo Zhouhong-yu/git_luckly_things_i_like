@@ -97,8 +97,11 @@ def demo_basic_threshold():
     cv2.destroyAllWindows()
 
     # --- 可视化: 不同阈值的选择 ---
-    import matplotlib
-    matplotlib.use("TkAgg")  # 使用 Tkinter 后端
+    try:
+        import matplotlib
+        matplotlib.use("TkAgg")  # 优先使用 Tkinter 后端（交互式）
+    except Exception:
+        pass  # 如果 TkAgg 不可用，使用默认后端
     import matplotlib.pyplot as plt
 
     # 绘制灰度直方图 + 阈值线

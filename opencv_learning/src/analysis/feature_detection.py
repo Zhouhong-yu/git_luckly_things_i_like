@@ -132,9 +132,10 @@ def demo_sift():
         sift = cv2.SIFT_create()
         sift_available = True
         print("   ✅ 使用 SIFT 检测器")
-    except AttributeError:
-        # 如果 opencv-python 没有 SIFT（可能需要 opencv-contrib-python）
-        print("   ⚠️ SIFT 不可用，使用 ORB 代替")
+    except (AttributeError, cv2.error):
+        # opencv-python 不含 SIFT（专利算法），需要 opencv-contrib-python
+        # 也可能因为其他原因创建失败（如缺少某些依赖）
+        print("   ⚠️ SIFT 不可用，跳过")
         print("     如需 SIFT，请安装: pip install opencv-contrib-python")
         sift_available = False
         return
