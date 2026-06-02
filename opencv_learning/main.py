@@ -28,7 +28,6 @@ if project_root not in sys.path:
 def print_banner():
     """
     打印程序启动横幅。
-    这个函数纯粹是为了好看，没有实际功能。
     """
     banner = r"""
 ╔══════════════════════════════════════════════════════════╗
@@ -71,7 +70,7 @@ def print_menu():
     print(menu)
 
 
-def run_module(module_id):
+def run_module(module_id):                              
     """
     根据用户输入的编号，运行对应的学习模块。
 
